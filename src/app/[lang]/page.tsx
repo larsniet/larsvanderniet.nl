@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
@@ -151,19 +150,18 @@ function Photos() {
   )
 }
 
+export const metadata = {
+  title: 'Lars van der Niet - Full stack developer, internationaal',
+  description:
+    'Ik ben Lars, een full stack developer uit Nederland. Ik ben gespecialiseerd in het bouwen van webapplicaties, van database tot webshop.',
+}
+
 export default async function Home() {
   const { allArticles } = await getAllArticles()
   const { allJobs } = await getJobs()
 
   return (
     <>
-      <Head>
-        <title>Lars van der Niet - Full stack developer, internationaal</title>
-        <meta
-          name="description"
-          content="I’m Spencer, a software designer and entrepreneur based in New York City. I’m the founder and CEO of Planetaria, where we develop technologies that empower regular people to explore space on their own terms."
-        />
-      </Head>
       <Container className="mt-9">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">

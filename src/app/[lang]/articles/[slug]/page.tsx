@@ -6,12 +6,24 @@ import { Prose } from '@/components/Prose'
 import { formatDate } from '@/lib/formatDate'
 import getSingleArticle from '@/lib/articles/getSingleArticle'
 
+export async function generateMetadata({ params }) {
+  const { article } = await getSingleArticle(params.slug)
+
+  const title = `${article.title} - Lars van der Niet`
+  const description = article.description
+
+  return {
+    title,
+    description,
+  }
+}
+
 export default async function Article({
   params,
 }: {
   params: { slug: string }
 }) {
-  const { project: article } = await getSingleArticle(params.slug)
+  const { article } = await getSingleArticle(params.slug)
 
   return (
     <>
@@ -36,7 +48,7 @@ export default async function Article({
                   <span className="ml-3">{formatDate(article.createdAt)}</span>
                 </time>
               </header>
-              <Prose className="mt-8">hallo</Prose>
+              <Prose className="mt-8">{article.description}</Prose>
             </article>
           </div>
         </div>

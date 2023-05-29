@@ -3,7 +3,7 @@ import { request } from '@/lib/db'
 export default async function getSingleArticle(slug: string) {
   return await request({
     query: `{
-      project (
+      article (
         filter: {
           slug: { eq: "${slug}" }
         }
@@ -11,27 +11,15 @@ export default async function getSingleArticle(slug: string) {
         id
         title
         slug
-        company
-        overview
+        content
         description
-        backgroundColor {
-          hex
-        }
-        featuredphoto {
-          responsiveImage {
-            alt
-            base64
-            bgColor
-            title
-          }
+        thumbnail {
+          url
+          alt
         }
         createdAt
         _status
         _firstPublishedAt
-      }
-    
-      _allProjectsMeta {
-        count
       }
     }`,
   })
