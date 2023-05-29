@@ -1,6 +1,7 @@
 import { request } from '@/lib/db'
+import { Project } from './project.types'
 
-export default async function getSingleProject(slug: string) {
+export default async function getSingleProject(slug: string): Promise<Project> {
   return await request({
     query: `{
       project (
@@ -16,12 +17,8 @@ export default async function getSingleProject(slug: string) {
         description
         link
         logo {
-          responsiveImage {
-            alt
-            base64
-            bgColor
-            title
-          }
+          url
+          alt
         }
         color {
           hex
@@ -30,10 +27,11 @@ export default async function getSingleProject(slug: string) {
         _status
         _firstPublishedAt
       }
-    
-      _allProjectsMeta {
-        count
-      }
     }`,
   })
+    .then((res) => res.project)
+    .catch((err) => {
+      console.log(err)
+      return null
+    })
 }

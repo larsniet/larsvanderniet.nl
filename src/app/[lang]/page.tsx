@@ -20,7 +20,7 @@ import image4 from '@/images/photos/image-4.jpg'
 import image5 from '@/images/photos/image-5.jpg'
 import { formatDate } from '@/lib/formatDate'
 import getAllArticles from '@/lib/articles/getAllArticles'
-import getJobs from '@/lib/getJobs'
+import getResume from '@/lib/getResume'
 
 function Article({ article }) {
   return (
@@ -82,38 +82,52 @@ function Resume({ jobs }) {
         <span className="ml-3">Work</span>
       </h2>
       <ol className="mt-6 space-y-4">
-        {jobs.map((role, roleIndex) => (
-          <li key={roleIndex} className="flex gap-4">
-            <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
-              <Image
-                src={role.logo.url}
-                alt=""
-                className="h-7 w-7"
-                width={28}
-                height={28}
-              />
-            </div>
-            <dl className="flex flex-auto flex-wrap gap-x-2">
-              <dt className="sr-only">Company</dt>
-              <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                {role.company}
-              </dd>
-              <dt className="sr-only">Role</dt>
-              <dd className="text-xs text-zinc-500 dark:text-zinc-400">
-                {role.title}
-              </dd>
-              <dt className="sr-only">Date</dt>
-              <dd
-                className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
-                aria-label={`${role.start} until ${role.end}`}
-              >
-                <time dateTime={role.start}>{role.start}</time>{' '}
-                <span aria-hidden="true">—</span>{' '}
-                <time dateTime={role.end}>{role.end}</time>
-              </dd>
-            </dl>
-          </li>
-        ))}
+        {jobs.map(
+          (
+            role: {
+              company: string
+              title: string
+              start: string
+              end: string
+              logo: {
+                url: string
+                alt: string
+              }
+            },
+            roleIndex: number
+          ) => (
+            <li key={roleIndex} className="flex gap-4">
+              <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center rounded-full shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+                <Image
+                  src={role.logo.url}
+                  alt={role.logo.alt}
+                  className="h-7 w-7"
+                  width={28}
+                  height={28}
+                />
+              </div>
+              <dl className="flex flex-auto flex-wrap gap-x-2">
+                <dt className="sr-only">Company</dt>
+                <dd className="w-full flex-none text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  {role.company}
+                </dd>
+                <dt className="sr-only">Role</dt>
+                <dd className="text-xs text-zinc-500 dark:text-zinc-400">
+                  {role.title}
+                </dd>
+                <dt className="sr-only">Date</dt>
+                <dd
+                  className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
+                  aria-label={`${role.start} until ${role.end}`}
+                >
+                  <time dateTime={role.start}>{role.start}</time>{' '}
+                  <span aria-hidden="true">—</span>{' '}
+                  <time dateTime={role.end}>{role.end}</time>
+                </dd>
+              </dl>
+            </li>
+          )
+        )}
       </ol>
       <Button href="#" variant="secondary" className="group mt-6 w-full">
         Download CV
@@ -157,8 +171,8 @@ export const metadata = {
 }
 
 export default async function Home() {
-  const { allArticles } = await getAllArticles()
-  const { allJobs } = await getJobs()
+  const articles = await getAllArticles()
+  const resume = await getResume()
 
   return (
     <>
@@ -199,13 +213,13 @@ export default async function Home() {
       <Container className="mt-24 md:mt-28">
         <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
           <div className="flex flex-col gap-16">
-            {allArticles.map((article: { slug: string }) => (
+            {articles.map((article: { slug: string }) => (
               <Article key={article.slug} article={article} />
             ))}
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
             <Newsletter />
-            <Resume jobs={allJobs} />
+            <Resume jobs={resume.jobs} />
           </div>
         </div>
       </Container>

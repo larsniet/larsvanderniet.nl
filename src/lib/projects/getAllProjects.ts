@@ -1,6 +1,7 @@
 import { request } from '@/lib/db'
+import { Project } from './project.types'
 
-export default async function getAllProjects() {
+export default async function getAllProjects(): Promise<Project[]> {
   return await request({
     query: `{
       allProjects {
@@ -13,6 +14,7 @@ export default async function getAllProjects() {
         link
         logo {
           url
+          alt
         }
         color {
           hex
@@ -27,4 +29,9 @@ export default async function getAllProjects() {
       }
     }`,
   })
+    .then((res) => res.allProjects)
+    .catch((err) => {
+      console.log(err)
+      return null
+    })
 }

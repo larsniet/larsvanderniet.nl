@@ -1,6 +1,7 @@
 import { request } from '@/lib/db'
+import type { Article } from './article.types'
 
-export default async function getAllArticles() {
+export default async function getAllArticles(): Promise<Article[]> {
   return await request({
     query: `{
       allArticles {
@@ -19,4 +20,9 @@ export default async function getAllArticles() {
       }
     }`,
   })
+    .then((res) => res.allArticles)
+    .catch((err) => {
+      console.log(err)
+      return null
+    })
 }
