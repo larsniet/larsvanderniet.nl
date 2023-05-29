@@ -4,6 +4,9 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
   },
+  images: {
+    domains: ['www.datocms-assets.com'],
+  },
 }
 
 export default nextConfig

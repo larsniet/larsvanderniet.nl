@@ -9,7 +9,7 @@ import {
   InstagramIcon,
   LinkedInIcon,
   TwitterIcon,
-} from '@/components/SocialIcons'
+} from '@/components/Icons'
 import portraitImage from '@/images/portrait.jpg'
 
 function SocialLink({ className, href, children, icon: Icon }) {

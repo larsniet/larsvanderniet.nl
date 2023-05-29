@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { formatDate } from '@/lib/formatDate'
-import { getAllArticles } from '@/lib/getAllArticles'
+import getAllArticles from '@/lib/articles/getAllArticles'
 
 function Article({ article }) {
   return (
@@ -14,31 +14,33 @@ function Article({ article }) {
         </Card.Title>
         <Card.Eyebrow
           as="time"
-          dateTime={article.date}
+          dateTime={article.createdAt}
           className="md:hidden"
           decorate
         >
-          {formatDate(article.date)}
+          {formatDate(article.createdAt)}
         </Card.Eyebrow>
-        <Card.Description>{article.description}</Card.Description>
+        <Card.Description>{article.overview}</Card.Description>
         <Card.Cta>Read article</Card.Cta>
       </Card>
       <Card.Eyebrow
         as="time"
-        dateTime={article.date}
+        dateTime={article.createdAt}
         className="mt-1 hidden md:block"
       >
-        {formatDate(article.date)}
+        {formatDate(article.createdAt)}
       </Card.Eyebrow>
     </article>
   )
 }
 
-export default function ArticlesIndex({ articles }) {
+export default async function ArticlesIndex() {
+  const { allProjects: articles } = await getAllArticles()
+
   return (
     <>
       <Head>
-        <title>Articles - Spencer Sharp</title>
+        <title>Articles - Lars van der Niet</title>
         <meta
           name="description"
           content="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
@@ -58,12 +60,4 @@ export default function ArticlesIndex({ articles }) {
       </SimpleLayout>
     </>
   )
-}
-
-export async function getStaticProps() {
-  return {
-    props: {
-      articles: (await getAllArticles()).map(({ component, ...meta }) => meta),
-    },
-  }
 }
