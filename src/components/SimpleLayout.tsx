@@ -3,7 +3,7 @@ import { Container } from '@/components/Container'
 interface SimpleLayoutProps {
   title: string
   intro: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export function SimpleLayout({ title, intro, children }: SimpleLayoutProps) {
@@ -17,7 +17,7 @@ export function SimpleLayout({ title, intro, children }: SimpleLayoutProps) {
           {intro}
         </p>
       </header>
-      <div className="mt-16 sm:mt-20">{children}</div>
+      {children && <div className="mt-16 sm:mt-20">{children}</div>}
     </Container>
   )
 }
