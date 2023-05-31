@@ -7,20 +7,27 @@ import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 
 import getAllProjects from '@/lib/projects/getAllProjects'
+import { getTranslation } from '@/lib/i18n'
 
 export const metadata = {
-  title: 'Projects - Lars van der Niet',
-  description: 'Things I’ve made trying to put my dent in the universe.',
+  title: 'Projecten',
+  description:
+    'Dingen die ik heb gebouwd waar ik trots op ben. Een aantal projecten zijn open-source, dus als je iets ziet wat je leuk vindt, draag dan vooral bij als je ideeën hebt.',
 }
 
-export default async function Projects() {
+export default async function Projects({
+  params: { lang },
+}: {
+  params: {
+    lang: string
+  }
+}) {
+  const { t } = await getTranslation(lang, 'projects')
+
   const projects = await getAllProjects()
 
   return (
-    <SimpleLayout
-      title="Things I’ve made trying to put my dent in the universe."
-      intro="I’ve worked on tons of little projects over the years but these are the ones that I’m most proud of. Many of them are open-source, so if you see something that piques your interest, check out the code and contribute if you have ideas for how it can be improved."
-    >
+    <SimpleLayout title={t('title')} intro={t('description')}>
       <ul
         role="list"
         className="grid grid-cols-1 gap-x-12 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
@@ -54,7 +61,7 @@ export default async function Projects() {
                 className="relative z-10 mt-6 flex text-sm font-medium text-zinc-400 transition group-hover:text-teal-500 dark:text-zinc-200"
               >
                 <LinkIcon className="h-6 w-6 flex-none" />
-                <span className="ml-2">Bekijk website</span>
+                <span className="ml-2">{t('check-it')}</span>
               </Link>
             )}
           </Card>

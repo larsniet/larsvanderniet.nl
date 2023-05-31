@@ -1,17 +1,11 @@
 'use client'
 
-import {
-  ClassAttributes,
-  Fragment,
-  HTMLAttributes,
-  JSX,
-  useEffect,
-  useRef,
-} from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Popover, Transition } from '@headlessui/react'
+import { useCookies } from 'react-cookie'
 import clsx from 'clsx'
 
 import {
@@ -22,7 +16,7 @@ import {
 } from '@/components/Icons'
 
 import { Container } from '@/components/Container'
-import avatarImage from '@/images/avatar.jpg'
+import avatarImage from '@/images/logo.webp'
 
 function MobileNavItem({ href, children }) {
   return (
@@ -34,9 +28,15 @@ function MobileNavItem({ href, children }) {
   )
 }
 
-function MobileNavigation(props) {
+function MobileNavigation({
+  navLinks,
+  className,
+}: {
+  navLinks: { href: string; label: string }[]
+  className?: string
+}) {
   return (
-    <Popover {...props}>
+    <Popover className={className}>
       <Popover.Button className="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20">
         Menu
         <ChevronDownIcon className="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400" />
@@ -76,10 +76,11 @@ function MobileNavigation(props) {
             </div>
             <nav className="mt-6">
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
-                <MobileNavItem href="/about">About</MobileNavItem>
-                <MobileNavItem href="/articles">Articles</MobileNavItem>
-                <MobileNavItem href="/projects">Projects</MobileNavItem>
-                <MobileNavItem href="/uses">Uses</MobileNavItem>
+                {navLinks.map((link) => (
+                  <MobileNavItem key={link.href} href={link.href}>
+                    {link.label}
+                  </MobileNavItem>
+                ))}
               </ul>
             </nav>
           </Popover.Panel>
@@ -112,24 +113,43 @@ function NavItem({ href, children }) {
   )
 }
 
-function DesktopNavigation(
-  props: JSX.IntrinsicAttributes &
-    ClassAttributes<HTMLElement> &
-    HTMLAttributes<HTMLElement>
-) {
+function DesktopNavigation({
+  navLinks,
+  className,
+}: {
+  navLinks: { href: string; label: string }[]
+  className?: string
+}) {
   return (
-    <nav {...props}>
+    <nav className={className}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-        <NavItem href="/about">About</NavItem>
-        <NavItem href="/articles">Articles</NavItem>
-        <NavItem href="/projects">Projects</NavItem>
-        <NavItem href="/uses">Uses</NavItem>
+        {navLinks.map((link) => (
+          <NavItem key={link.href} href={link.href}>
+            {link.label}
+          </NavItem>
+        ))}
       </ul>
     </nav>
   )
 }
 
 function ModeToggle() {
+  const [cookies, setCookie] = useCookies(['isDarkMode'])
+
+  // Initialize state from the cookie
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const cookieValue = cookies.isDarkMode
+    return cookieValue === 'true' ? true : false
+  })
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isDarkMode])
+
   function disableTransitionsTemporarily() {
     document.documentElement.classList.add('[&_*]:!transition-none')
     window.setTimeout(() => {
@@ -140,15 +160,11 @@ function ModeToggle() {
   function toggleMode() {
     disableTransitionsTemporarily()
 
-    let darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    let isSystemDarkMode = darkModeMediaQuery.matches
-    let isDarkMode = document.documentElement.classList.toggle('dark')
+    let toggledIsDarkMode = !isDarkMode
 
-    if (isDarkMode === isSystemDarkMode) {
-      delete window.localStorage.isDarkMode
-    } else {
-      window.localStorage.isDarkMode = isDarkMode
-    }
+    setIsDarkMode(toggledIsDarkMode)
+
+    setCookie('isDarkMode', toggledIsDarkMode, { path: '/' })
   }
 
   return (
@@ -164,23 +180,49 @@ function ModeToggle() {
   )
 }
 
-function LanguageToggle() {
-  const toggleLanguage = () => {
-    console.log('oke')
+function LanguageToggle({ lang }: { lang: string }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [cookies, setCookie] = useCookies(['i18next'])
+  const [language, setLanguage] = useState(lang)
+
+  function setEnglish() {
+    const newPath = pathname.replace('/nl', '/en')
+    setCookie('i18next', 'en', { path: '/' })
+    setLanguage('nl')
+    router.push(newPath)
+  }
+
+  function setDutch() {
+    const newPath = pathname.replace('/en', '/nl')
+    setCookie('i18next', 'nl', { path: '/' })
+    setLanguage('nl')
+    router.push(newPath)
+  }
+
+  function getColor(lang: string) {
+    return language === lang ? 'text-teal-500' : 'text-zinc-700'
   }
 
   return (
-    <button
-      type="button"
-      aria-label="Switch language"
-      className="group rounded-full bg-white/90 px-3 py-2 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
-      onClick={toggleLanguage}
-    >
-      <div className="relative flex items-center">
-        <div className="mx-2 text-zinc-700 dark:text-zinc-400">EN</div>
-        <div className="mx-2 text-zinc-700 dark:text-zinc-400">NL</div>
-      </div>
-    </button>
+    <div className="group relative flex items-center rounded-full bg-white/90 px-3 py-2 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20">
+      <button
+        aria-label="Set language to English"
+        type="button"
+        className={`mx-2 dark:text-zinc-400 ${getColor('en')}`}
+        onClick={setEnglish}
+      >
+        EN
+      </button>
+      <button
+        aria-label="Set language to Dutch"
+        type="button"
+        className={`mx-2 dark:text-zinc-400 ${getColor('nl')}`}
+        onClick={setDutch}
+      >
+        NL
+      </button>
+    </div>
   )
 }
 
@@ -190,7 +232,13 @@ function clamp(number: number, a: number, b: number) {
   return Math.min(Math.max(number, min), max)
 }
 
-function AvatarContainer({ className, ...props }) {
+function AvatarContainer({
+  className,
+  ...props
+}: {
+  className?: string
+  [key: string]: any
+}) {
   return (
     <div
       className={clsx(
@@ -202,13 +250,21 @@ function AvatarContainer({ className, ...props }) {
   )
 }
 
-function Avatar({ large = false, className, ...props }) {
+function Avatar({
+  large = false,
+  className,
+  style,
+}: {
+  large?: boolean
+  className?: string
+  style?: React.CSSProperties
+}) {
   return (
     <Link
       href="/"
       aria-label="Home"
       className={clsx(className, 'pointer-events-auto')}
-      {...props}
+      style={style}
     >
       <Image
         src={avatarImage}
@@ -224,19 +280,27 @@ function Avatar({ large = false, className, ...props }) {
   )
 }
 
-export function Header() {
-  let isHomePage = usePathname() === '/'
+export function Header({
+  navLinks,
+  lang,
+}: {
+  navLinks: { label: string; href: string }[]
+  lang: string
+}) {
+  const pathname = usePathname()
+  let isHomePage = pathname === '/'
 
   let headerRef = useRef()
   let avatarRef = useRef()
   let isInitial = useRef(true)
 
   useEffect(() => {
+    // @ts-ignore
     let downDelay = avatarRef.current?.offsetTop ?? 0
     let upDelay = 64
 
     function setProperty(property: string, value: string | number) {
-      document.documentElement.style.setProperty(property, value)
+      document.documentElement.style.setProperty(property, value.toString())
     }
 
     function removeProperty(property: string) {
@@ -244,6 +308,7 @@ export function Header() {
     }
 
     function updateHeaderStyles() {
+      // @ts-ignore
       let { top, height } = headerRef.current.getBoundingClientRect()
       let scrollY = clamp(
         window.scrollY,
@@ -348,7 +413,7 @@ export function Header() {
             >
               <div
                 className="top-[var(--avatar-top,theme(spacing.3))] w-full"
-                style={{ position: 'var(--header-inner-position)' }}
+                style={{ position: 'var(--header-inner-position)' } as any}
               >
                 <div className="relative">
                   <AvatarContainer
@@ -361,7 +426,9 @@ export function Header() {
                   <Avatar
                     large
                     className="block h-16 w-16 origin-left"
-                    style={{ transform: 'var(--avatar-image-transform)' }}
+                    style={
+                      { transform: 'var(--avatar-image-transform)' } as any
+                    }
                   />
                 </div>
               </div>
@@ -371,7 +438,7 @@ export function Header() {
         <div
           ref={headerRef}
           className="top-0 z-10 h-16 pt-6"
-          style={{ position: 'var(--header-position)' }}
+          style={{ position: 'var(--header-position)' } as any}
         >
           <Container
             className="top-[var(--header-top,theme(spacing.6))] w-full"
@@ -386,12 +453,18 @@ export function Header() {
                 )}
               </div>
               <div className="flex flex-1 justify-end md:justify-center">
-                <MobileNavigation className="pointer-events-auto md:hidden" />
-                <DesktopNavigation className="pointer-events-auto hidden md:block" />
+                <MobileNavigation
+                  navLinks={navLinks}
+                  className="pointer-events-auto md:hidden"
+                />
+                <DesktopNavigation
+                  navLinks={navLinks}
+                  className="pointer-events-auto hidden md:block"
+                />
               </div>
               <div className="flex items-center justify-end md:flex-1">
                 <div className="items-cente pointer-events-auto flex space-x-2">
-                  <LanguageToggle />
+                  <LanguageToggle lang={lang} />
                   <ModeToggle />
                 </div>
               </div>

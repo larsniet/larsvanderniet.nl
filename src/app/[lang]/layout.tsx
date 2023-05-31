@@ -1,12 +1,33 @@
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 
+import { dir } from 'i18next'
+import { getTranslation, languages } from '@/lib/i18n'
 import '@/styles/tailwind.css'
 import 'focus-visible'
 
-export default function RootLayout({ children }) {
+export async function generateStaticParams() {
+  return languages.map((lng) => ({ lng }))
+}
+
+export default async function RootLayout({
+  children,
+  params: { lang },
+}: {
+  children: React.ReactNode
+  params: { lang: string }
+}) {
+  const { t } = await getTranslation(lang)
+
+  const navLinks = [
+    { href: `/${lang}/about`, label: t('about') },
+    { href: `/${lang}/articles`, label: t('articles') },
+    { href: `/${lang}/projects`, label: t('projects') },
+    // { href: `/${lang}/uses`, label: t('uses') },
+  ]
+
   return (
-    <html lang="en" className="h-full">
+    <html lang={lang} dir={dir(lang)} className="h-full">
       <body className="h-full bg-white dark:bg-zinc-900">
         <div className="fixed inset-0 flex justify-center sm:px-8">
           <div className="flex w-full max-w-7xl lg:px-8">
@@ -14,9 +35,9 @@ export default function RootLayout({ children }) {
           </div>
         </div>
         <div className="relative">
-          <Header />
+          <Header navLinks={navLinks} lang={lang} />
           <main>{children}</main>
-          <Footer />
+          <Footer translation={t} navLinks={navLinks} />
         </div>
       </body>
     </html>

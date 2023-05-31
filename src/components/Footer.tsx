@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { Container } from '@/components/Container'
+import { Translation } from 'react-i18next'
 
 function NavLink({ href, children }) {
   return (
@@ -13,7 +14,13 @@ function NavLink({ href, children }) {
   )
 }
 
-export function Footer() {
+export function Footer({
+  translation,
+  navLinks,
+}: {
+  translation: any
+  navLinks: { label: string; href: string }[]
+}) {
   return (
     <footer className="mt-32">
       <Container.Outer>
@@ -21,14 +28,15 @@ export function Footer() {
           <Container.Inner>
             <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
               <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                <NavLink href="/about">About</NavLink>
-                <NavLink href="/projects">Projects</NavLink>
-                <NavLink href="/speaking">Speaking</NavLink>
-                <NavLink href="/uses">Uses</NavLink>
+                {navLinks.map(({ href, label }) => (
+                  <NavLink key={href} href={href}>
+                    {label}
+                  </NavLink>
+                ))}
               </div>
               <p className="text-sm text-zinc-400 dark:text-zinc-500">
-                &copy; {new Date().getFullYear()} Lars van der Niet. All rights
-                reserved.
+                &copy; {new Date().getFullYear()} Lars van der Niet.{' '}
+                {translation('rights')}
               </p>
             </div>
           </Container.Inner>
