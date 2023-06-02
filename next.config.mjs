@@ -1,3 +1,5 @@
+import withPWAInit from '@ducanh2912/next-pwa'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -11,7 +13,7 @@ const nextConfig = {
   generateRobotsTxt: true,
 }
 
-const withPWA = require('@ducanh2912/next-pwa').default({
+const withPWA = withPWAInit({
   dest: 'public',
 })
 
