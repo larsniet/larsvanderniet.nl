@@ -9,12 +9,10 @@ const nextConfig = {
   images: {
     domains: ['www.datocms-assets.com'],
   },
-  siteUrl: process.env.SITE_URL || 'https://larsvanderniet.nl',
-  generateRobotsTxt: true,
 }
 
 const withPWA = withPWAInit({
   dest: 'public',
 })
 
-module.exports = withPWA(nextConfig)
+export default withPWA(nextConfig)
