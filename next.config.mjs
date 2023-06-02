@@ -7,6 +7,8 @@ const nextConfig = {
   images: {
     domains: ['www.datocms-assets.com'],
   },
+  siteUrl: process.env.SITE_URL || 'https://larsvanderniet.nl',
+  generateRobotsTxt: true,
 }
 
 const withPWA = require('@ducanh2912/next-pwa').default({
