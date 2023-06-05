@@ -2,8 +2,8 @@ import { createInstance } from 'i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
 import { initReactI18next } from 'react-i18next/initReactI18next'
 
-export const fallbackLng = 'en'
-export const languages = [fallbackLng, 'nl']
+export const fallbackLng = 'nl'
+export const languages = [fallbackLng, 'en']
 
 export const defaultNS = 'translation'
 

@@ -201,7 +201,7 @@ export async function generateMetadata({
 export default async function Home({ params: { lang } }) {
   const { t } = await getTranslation(lang)
 
-  const articles = await getAllArticles()
+  const articles = await getAllArticles(lang)
   const resume = await getResume()
 
   return (

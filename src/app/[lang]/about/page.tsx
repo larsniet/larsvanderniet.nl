@@ -6,16 +6,25 @@ import {
   GitHubIcon,
   InstagramIcon,
   LinkedInIcon,
-  TwitterIcon,
   MailIcon,
 } from '@/components/Icons'
 import portraitImage from '@/images/portrait.jpg'
 import { getTranslation } from '@/lib/i18n'
 
-export const metadata = {
-  title: 'Over Lars',
-  description:
-    'Ik ben Lars van der Niet, een 22-jarige ontwikkelaar uit Nederland. Ik vind het geweldig om dingen voor het web te bouwen, op mijn motor te rijden en met mijn vrienden te surfen.',
+export async function generateMetadata({
+  params: { lang },
+}: {
+  params: { lang: string }
+}) {
+  const { t } = await getTranslation(lang, 'about')
+
+  const title = t('meta-title')
+  const description = t('description')
+
+  return {
+    title,
+    description,
+  }
 }
 
 export default async function About({ params: { lang } }) {

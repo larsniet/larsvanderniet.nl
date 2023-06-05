@@ -40,7 +40,7 @@ export async function request({
   const jsonResponse = await response.json()
   if ('errors' in jsonResponse) {
     console.error(jsonResponse.errors)
-    throw new Error('Failed to fetch GraphQL query')
+    return jsonResponse
   }
 
   return jsonResponse.data

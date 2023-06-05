@@ -1,31 +1,22 @@
 import { request } from '@/lib/db'
 import { Project } from './project.types'
+import { getLanguage } from '@/lib/getLanguage'
 
-export default async function getAllProjects(): Promise<Project[]> {
+export default async function getAllProjects(lang: string): Promise<Project[]> {
   return await request({
     query: `{
-      allProjects {
+      allProjects (locale: ${getLanguage(lang)}) {
         id
         name
-        slug
-        description
-        content
         description
         link
         logo {
           url
           alt
         }
-        color {
-          hex
-        }
         createdAt
         _status
         _firstPublishedAt
-      }
-    
-      _allProjectsMeta {
-        count
       }
     }`,
   })

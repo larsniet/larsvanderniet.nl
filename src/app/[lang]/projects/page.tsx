@@ -9,10 +9,20 @@ import { SimpleLayout } from '@/components/SimpleLayout'
 import getAllProjects from '@/lib/projects/getAllProjects'
 import { getTranslation } from '@/lib/i18n'
 
-export const metadata = {
-  title: 'Projecten',
-  description:
-    'Dingen die ik heb gebouwd waar ik trots op ben. Een aantal projecten zijn open-source, dus als je iets ziet wat je leuk vindt, draag dan vooral bij als je ideeën hebt.',
+export async function generateMetadata({
+  params: { lang },
+}: {
+  params: { lang: string }
+}) {
+  const { t } = await getTranslation(lang, 'projects')
+
+  const title = t('meta-title')
+  const description = t('description')
+
+  return {
+    title,
+    description,
+  }
 }
 
 export default async function Projects({
@@ -24,7 +34,7 @@ export default async function Projects({
 }) {
   const { t } = await getTranslation(lang, 'projects')
 
-  const projects = await getAllProjects()
+  const projects = await getAllProjects(lang)
 
   return (
     <SimpleLayout title={t('title')} intro={t('description')}>

@@ -1,10 +1,11 @@
 import { request } from '@/lib/db'
 import type { Article } from './article.types'
+import { getLanguage } from '../getLanguage'
 
-export default async function getAllArticles(): Promise<Article[]> {
+export default async function getAllArticles(lang: string): Promise<Article[]> {
   return await request({
     query: `{
-      allArticles {
+      allArticles (locale: ${getLanguage(lang)}) {
         id
         title
         slug

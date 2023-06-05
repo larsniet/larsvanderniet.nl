@@ -4,23 +4,41 @@ import { formatDate } from '@/lib/formatDate'
 import getAllArticles from '@/lib/articles/getAllArticles'
 import { getTranslation } from '@/lib/i18n'
 
+export async function generateMetadata({
+  params: { lang },
+}: {
+  params: { lang: string }
+}) {
+  const { t } = await getTranslation(lang, 'articles')
+
+  const title = t('meta-title')
+  const description = t('description')
+
+  return {
+    title,
+    description,
+  }
+}
+
 function Article({ article, translations, lang }) {
   return (
     <article className="md:grid md:grid-cols-4 md:items-baseline">
-      <Card className="md:col-span-3">
-        <Card.Title href={`/articles/${article.slug}`}>
-          {article.title}
-        </Card.Title>
-        <Card.Eyebrow
-          as="time"
-          dateTime={article.createdAt}
-          className="md:hidden"
-          decorate
-        >
-          {formatDate(article.createdAt, lang)}
-        </Card.Eyebrow>
-        <Card.Description>{article.overview}</Card.Description>
-        <Card.Cta>{translations('read')}</Card.Cta>
+      <Card className="flex flex-col space-y-4 md:col-span-3">
+        <div className="flex flex-wrap">
+          <Card.Title href={`/${lang}/articles/${article.slug}`}>
+            {article.title}
+          </Card.Title>
+          <Card.Eyebrow
+            as="time"
+            dateTime={article.createdAt}
+            className="md:hidden"
+            decorate
+          >
+            {formatDate(article.createdAt, lang)}
+          </Card.Eyebrow>
+          <Card.Description>{article.description}</Card.Description>
+          <Card.Cta>{translations('read')}</Card.Cta>
+        </div>
       </Card>
       <Card.Eyebrow
         as="time"
@@ -33,12 +51,6 @@ function Article({ article, translations, lang }) {
   )
 }
 
-export const metadata = {
-  title: 'Artikelen',
-  description:
-    'Alle artikelen die ik heb geschreven over software design, projecten en meer.',
-}
-
 export default async function ArticlesIndex({
   params: { lang },
 }: {
@@ -48,7 +60,7 @@ export default async function ArticlesIndex({
 }) {
   const { t } = await getTranslation(lang, 'articles')
 
-  const articles = await getAllArticles()
+  const articles = await getAllArticles(lang)
 
   return (
     <SimpleLayout title={t('title')} intro={t('description')}>

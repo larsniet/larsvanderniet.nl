@@ -1,6 +1,7 @@
-import { ReactNode, ComponentType, HTMLAttributes, JSX, SVGProps } from 'react'
+import { ReactNode, ComponentType, JSX, SVGProps } from 'react'
 import Link, { LinkProps } from 'next/link'
 import clsx from 'clsx'
+import Image from 'next/image'
 
 interface ChevronRightIconProps
   extends JSX.IntrinsicAttributes,

@@ -1,26 +1,34 @@
 import { request } from '@/lib/db'
+import { getLanguage } from '@/lib/getLanguage'
+import { Article } from './article.types'
 
-export default async function getSingleArticle(slug: string) {
+export default async function getSingleArticle(
+  slug: string,
+  lang: string
+): Promise<Article> {
+  const locale = getLanguage(lang)
+
   return await request({
     query: `{
-      article (
-        filter: {
-          slug: { eq: "${slug}" }
-        }
+      article(
+        locale: ${locale}
+        filter: {slug: {eq: "${slug}"}}
       ) {
         id
         title
         slug
-        content
-        description
         thumbnail {
           url
           alt
         }
+        description
+        content
         createdAt
         _status
-        _firstPublishedAt
+        _createdAt
       }
     }`,
+  }).then((data: any) => {
+    return data.article
   })
 }
