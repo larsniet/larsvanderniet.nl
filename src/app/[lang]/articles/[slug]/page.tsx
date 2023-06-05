@@ -47,7 +47,11 @@ export default async function Article({
                 </span>
               </time>
             </header>
-            <Prose className="mt-8 font-bold">{article.description}</Prose>
+            <Prose className="mt-8 font-bold">
+              <div
+                dangerouslySetInnerHTML={{ __html: article.description }}
+              ></div>
+            </Prose>
             <Prose className="mt-8">
               <div dangerouslySetInnerHTML={{ __html: article.content }}></div>
             </Prose>
