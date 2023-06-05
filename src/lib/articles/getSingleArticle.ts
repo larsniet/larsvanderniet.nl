@@ -21,8 +21,8 @@ export default async function getSingleArticle(
           url
           alt
         }
-        description
-        content
+        description (markdown: true)
+        content (markdown: true)
         createdAt
         _status
         _createdAt
