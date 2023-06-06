@@ -5,6 +5,7 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     scrollRestoration: true,
+    serverActions: true,
   },
   images: {
     domains: ['www.datocms-assets.com'],

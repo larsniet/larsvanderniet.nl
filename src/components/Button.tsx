@@ -34,6 +34,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset'
   className?: string
   children?: React.ReactNode
+  disabled?: boolean
   href?: string
 }
 
@@ -43,6 +44,7 @@ export function Button({
   className,
   children,
   href,
+  disabled,
   ...props
 }: ButtonProps) {
   const router = useRouter()
@@ -50,6 +52,7 @@ export function Button({
   className = clsx(
     'inline-flex items-center gap-2 justify-center rounded-md py-2 px-3 text-sm outline-offset-2 transition active:transition-none',
     variantStyles[variant],
+    disabled && 'opacity-50 cursor-not-allowed',
     className
   )
 
@@ -66,6 +69,7 @@ export function Button({
         <button
           type="button"
           onClick={() => router.back()}
+          disabled={disabled}
           aria-label="Go back"
           className="group mb-8 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md shadow-zinc-800/5 ring-1 ring-zinc-900/5 transition dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0 dark:ring-white/10 dark:hover:border-zinc-700 dark:hover:ring-white/20 lg:absolute lg:-left-5 lg:-mt-2 lg:mb-0 xl:-top-1.5 xl:left-0 xl:mt-0"
         >

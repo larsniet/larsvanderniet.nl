@@ -5,11 +5,11 @@ import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { Container } from '@/components/Container'
 import { SocialLink } from '@/components/SocialLink'
+import { NewsLetter } from '@/components/NewsLetter'
 import {
   GitHubIcon,
   InstagramIcon,
   LinkedInIcon,
-  MailIcon,
   BriefcaseIcon,
   ArrowDownIcon,
 } from '@/components/Icons'
@@ -60,35 +60,6 @@ function Article({ article, lang }: { article: any; lang: string }) {
       <Card.Description>{article.description}</Card.Description>
       <Card.Cta>Read article</Card.Cta>
     </Card>
-  )
-}
-
-function Newsletter({ translations }) {
-  return (
-    <form
-      action="/thank-you"
-      className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40"
-    >
-      <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-        <MailIcon className="h-6 w-6 flex-none" />
-        <span className="ml-3">{translations('news-title')}</span>
-      </h2>
-      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-        {translations('news-desc')}
-      </p>
-      <div className="mt-6 flex">
-        <input
-          type="email"
-          placeholder={translations('email')}
-          aria-label={translations('email')}
-          required
-          className="min-w-0 flex-auto appearance-none rounded-md border border-zinc-900/10 bg-white px-3 py-[calc(theme(spacing.2)-1px)] shadow-md shadow-zinc-800/5 placeholder:text-zinc-400 focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-500/10 dark:border-zinc-700 dark:bg-zinc-700/[0.15] dark:text-zinc-200 dark:placeholder:text-zinc-500 dark:focus:border-teal-400 dark:focus:ring-teal-400/10 sm:text-sm"
-        />
-        <Button type="submit" className="ml-4 flex-none">
-          {translations('subscribe')}
-        </Button>
-      </div>
-    </form>
   )
 }
 
@@ -245,7 +216,12 @@ export default async function Home({ params: { lang } }) {
             ))}
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
-            <Newsletter translations={t} />
+            <NewsLetter
+              title={t('news-title')}
+              description={t('news-desc')}
+              email={t('email')}
+              subscribe={t('subscribe')}
+            />
             <Resume translations={t} jobs={resume.jobs} />
           </div>
         </div>
