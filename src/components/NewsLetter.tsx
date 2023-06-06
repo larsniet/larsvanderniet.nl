@@ -4,10 +4,10 @@ import { MailIcon } from '@/components/Icons'
 import { Button } from '@/components/Button'
 import { useState } from 'react'
 
-export function NewsLetter({ title, description, email, subscribe }) {
+export function NewsLetter({ title, description, email, subscribe, lang }) {
   const [isLoading, setIsLoading] = useState(false)
   const [response, setResponse] = useState('')
-  const [responseColor, setResponseColor] = useState('')
+  const [isError, setIsError] = useState(false)
 
   async function onSubmit(event: any) {
     event.preventDefault()
@@ -16,6 +16,7 @@ export function NewsLetter({ title, description, email, subscribe }) {
 
     const body = {
       email: formData.get('email'),
+      lang,
     }
 
     const res = await fetch('/api/newsletter', {
@@ -28,12 +29,12 @@ export function NewsLetter({ title, description, email, subscribe }) {
 
     setIsLoading(false)
 
-    if (result.error) {
-      setResponseColor('red-500')
+    if (result.error || res.status !== 200) {
+      setIsError(true)
       return setResponse(result.error)
     }
 
-    setResponseColor('green-500')
+    setIsError(false)
     return setResponse(result.message)
   }
 
@@ -58,7 +59,13 @@ export function NewsLetter({ title, description, email, subscribe }) {
         <div className="relative">
           {response && (
             <div className="flex pb-1">
-              <p className={`text-xs text-${responseColor}`}>{response}</p>
+              <p
+                className={
+                  isError ? 'text-xs text-red-600' : 'text-xs text-green-600'
+                }
+              >
+                {response}
+              </p>
             </div>
           )}
         </div>

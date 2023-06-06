@@ -1,0 +1,7 @@
+{
+    "missing-email": "Missing email",
+    "invalid-email": "Invalid email",
+    "error-create-subscription": "Error creating subscriber",
+    "already-subscribed": "You are already subscribed",
+    "succesfull-subscribed": "You are now subscribed!"
+}

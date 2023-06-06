@@ -1,21 +1,25 @@
 import { NextResponse } from 'next/server'
 import { buildClient } from '@datocms/cma-client-node'
+import { getTranslation } from '@/lib/i18n'
 
 const client = buildClient({ apiToken: process.env.NEXT_DATOCMS_ADMIN_TOKEN })
 
-export async function POST(req: Request) {
+export async function POST(req: any) {
   const res = await req.json()
   const email = res.email
+  const lang = res.lang || 'en'
+
+  const { t } = await getTranslation(lang, 'responses')
 
   // Verify if email is present
   if (!email) {
-    return NextResponse.json({ error: 'Missing email' }, { status: 400 })
+    return NextResponse.json({ error: t('missing-email') }, { status: 400 })
   }
 
   // Verify if email is correct
   const emailRegex = /\S+@\S+\.\S+/
   if (!emailRegex.test(email)) {
-    return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
+    return NextResponse.json({ error: t('invalid-email') }, { status: 400 })
   }
 
   // Verify if subscriber already exists
@@ -29,9 +33,8 @@ export async function POST(req: Request) {
 
   // If subscriber exists, return error
   if (subscriberExists) {
-    console.log(subscriberExists)
     return NextResponse.json(
-      { error: 'You are already subscribed' },
+      { error: t('already-subscribed') },
       { status: 400 }
     )
   }
@@ -48,14 +51,14 @@ export async function POST(req: Request) {
   // If error creating subscriber, return error
   if (!createRes) {
     return NextResponse.json(
-      { error: 'Error creating subscriber' },
+      { error: t('error-create-subscription') },
       { status: 500 }
     )
   }
 
   // Return OK
   return NextResponse.json(
-    { message: 'You are now subscribed!' },
+    { message: t('succesfull-subscribed') },
     { status: 200 }
   )
 }

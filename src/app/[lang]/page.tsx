@@ -221,6 +221,7 @@ export default async function Home({ params: { lang } }) {
               description={t('news-desc')}
               email={t('email')}
               subscribe={t('subscribe')}
+              lang={lang}
             />
             <Resume translations={t} jobs={resume.jobs} />
           </div>

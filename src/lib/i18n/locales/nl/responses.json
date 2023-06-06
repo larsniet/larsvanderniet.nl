@@ -1,0 +1,7 @@
+{
+    "missing-email": "E-mail is niet ingevuld",
+    "invalid-email": "E-mail is niet geldig",
+    "error-create-subscription": "Er is een fout opgetreden tijdens het aanmelden",
+    "already-subscribed": "Je bent al aangemeld",
+    "succesfull-subscribed": "Je bent aangemeld!"
+}
