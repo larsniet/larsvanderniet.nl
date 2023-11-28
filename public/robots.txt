@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://larsvanderniet.nl
-
-# Sitemaps
-Sitemap: https://larsvanderniet.nl/sitemap.xml

@@ -1,69 +1,36 @@
-<div align="center">
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-<img alt="Larsvanderniet.nl favicon" width="50px" height="50px" src="https://github.com/larsniet/lars-gatsby/blob/main/media/favicon.png">
+## Getting Started
 
-# Lars van der Niet
+First, run the development server:
 
-Larsvanderniet.nl is a **portfolio website**, created by Lars van der Niet.
-
-It's a [GatsbyJS](https://www.gatsbyjs.com/) website and uses [DatoCMS](https://www.datocms.com/) as backend. Apart from the basic SEO stuff done within Gatsby, my application also hosts an [RSS feed](https://www.larsvanderniet.nl/rss.xml). This feed is updated automatically using a [cronjob](https://github.com/larsniet/larsniet/blob/main/.github/workflows/project-workflow.yml) in Github Actions which retrieves all current projects and displays them on my Github profile.
-
-[Installation](#installation) •
-[Configuration](#configuration)
-
-<img alt="Larsvanderniet.nl screenshot" width="100%" src="https://github.com/larsniet/lars-gatsby/blob/main/media/larsvanderniet.png">
-
-</div>
-
-## Installation
-
-### Step 1: Clone this repository
-
-Run the following command in your terminal to clone this repo.
-
-```sh
-git clone https://github.com/larsniet/lars-gatsby.git
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### Step 2: Install dependencies
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Open up a terminal within the folder where you cloned the repo and run the following command.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```sh
-cd lars-gatsby && yarn install
-```
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Configuration
+## Learn More
 
-### Dato CMS
+To learn more about Next.js, take a look at the following resources:
 
-As Content Management System I chose [DatoCMS](https://www.datocms.com/). It's a user-friendly focused CMS which makes it really easy to understand how content is structured. Ofcourse I cannot give you access to my specific DatoCMS dashboard, so you'll have to do with a screenshot of my project-modal.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-<img alt="Screenshot of project modal in DatoCMS" width="100%" src="https://github.com/larsniet/lars-gatsby/blob/main/media/modal.png">
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-### Environment variables
+## Deploy on Vercel
 
-Environment variables can be used for configuration.
-They must be set before `yarn build` is called.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- `DATO_API_TOKEN`
-  - Read only API token from DatoCMS.
-  - Note: Using DatoCMS might be a bit confusing if you don't know GraphQL/GatsbyJS.
-
-### Build the application
-
-If everything is linked correctly and adjusted to your needs, simply run the following command
-
-```sh
-yarn start
-```
-
-## License and restrictions
-
-This project is AGPL-3.0 licenced with certain restrictions for commercial use. These restrictions are as follows:
-
-The files in the content, static, src/pages and src/images folders are proprietary, unless stated otherwise on the top of the file.
-
-In short, this means that this project can be used under the AGPL-3.0 license, as long as all content is completely replaced, the styling has been modified and all trademarks have been removed, making sure all current branding and content has been removed.
-
-Exceptions can be made for these restrictions, but are only valid with written consent from Lars van der Niet. If you would like me to make an exception, please send an email to lvdnbusiness@icloud.com.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
