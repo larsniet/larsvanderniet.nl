@@ -1,28 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProjectPreview from "@/components/ProjectPreview";
+import projects from "@/utils/data";
 
 import outline from "@/assets/logo_outline.png";
-import youngpwr from "@/assets/youngpwr.jpg";
-import sieraat from "@/assets/sieraat.jpeg";
-
-const projects = [
-  {
-    title: "Youngpwr",
-    image: youngpwr,
-    href: "/projects/larsvanderniet",
-  },
-  {
-    title: "Sieraat",
-    image: sieraat,
-    href: "/projects/larsvanderniet",
-  },
-];
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col xl:flex-row">
-      <div className="flex h-screen flex-col justify-between p-8 xl:w-1/2 xl:sticky xl:top-0 xl:p-20">
+      <div className="flex min-h-screen flex-col justify-between p-8 xl:w-1/2 xl:sticky xl:top-0 xl:p-20">
         <div className="flex gap-2 items-end">
           <Link href="/">
             <div className="w-8 h-8 bg-black relative lg:w-12 lg:h-12">
@@ -35,20 +21,22 @@ export default function Home() {
               />
             </div>
           </Link>
-          <p className="whitespace-nowrap">
+          <div className="text-xs whitespace-nowrap md:text-sm lg:text-base">
             <span className="text-[#666]">Full stack developer based in </span>
             Amsterdam
-          </p>
+          </div>
         </div>
         <div className="flex flex-col gap-8 max-w-4xl">
           <div className="flex flex-col">
-            <h1>Lars van der Niet</h1>
-            <h2>
-              Engineering creatively with focus on automation and reliability.
-            </h2>
+            <h1>
+              Lars van der Niet <br />
+              <span className="font-extralight">
+                Engineering creatively with focus on automation and reliability.
+              </span>
+            </h1>
           </div>
           <div className="flex flex-col gap-2">
-            <p>
+            <div>
               <Link
                 className="text-[#666]"
                 href="mailto:lvdnbusiness@gmail.com"
@@ -61,10 +49,10 @@ export default function Home() {
               >
                 linkedin.com/in/lars-van-der-niet
               </Link>
-            </p>
-            <p className="text-[#666]">
+            </div>
+            <div className="text-[#666]">
               &copy; {new Date().getFullYear()} Lars van der Niet
-            </p>
+            </div>
           </div>
         </div>
       </div>

@@ -1,20 +1,11 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "@/components/Icons";
+import { Project } from "@/utils/data";
 
-export type ProjectPreviewProps = {
-  title: string;
-  image: StaticImageData | string;
-  href: string;
-};
-
-export default function ProjectPreview({
-  title,
-  image,
-  href,
-}: ProjectPreviewProps) {
+export default function ProjectPreview({ title, image, slug }: Project) {
   return (
-    <Link href={href} className="relative flex h-screen">
+    <Link href={`/project/${slug}`} className="relative flex h-screen">
       <Image
         src={image}
         alt={title}
