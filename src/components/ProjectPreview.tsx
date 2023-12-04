@@ -1,13 +1,13 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "@/components/Icons";
-import { Project } from "@/utils/data";
+import type { Project } from "@/types";
 
-export default function ProjectPreview({ title, image, slug }: Project) {
+export default function ProjectPreview({ title, slug }: Project) {
   return (
     <Link href={`/project/${slug}`} className="relative flex h-screen">
       <Image
-        src={image}
+        src={`/images/${slug}.jpeg`}
         alt={title}
         width={800}
         height={1000}
@@ -18,7 +18,7 @@ export default function ProjectPreview({ title, image, slug }: Project) {
           className="absolute top-4 right-4 h-3 w-3"
           stroke="#fff"
         />
-        <p className="absolute bottom-4 left-4 text-white font-light">
+        <p className="absolute capitalize bottom-4 left-4 text-white font-light">
           {title}
         </p>
       </div>

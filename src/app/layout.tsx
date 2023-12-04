@@ -65,7 +65,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={bodyClasses}>{children}</body>
+      <body
+        style={{ minHeight: "-webkit-fill-available" }}
+        className={bodyClasses}
+      >
+        {children}
+      </body>
     </html>
   );
 }

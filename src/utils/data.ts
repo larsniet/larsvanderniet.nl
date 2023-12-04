@@ -1,38 +1,70 @@
-import youngpwr from "@/assets/youngpwr.jpg";
-import sieraat from "@/assets/sieraat.jpeg";
-import { StaticImageData } from "next/image";
+import type { ObsidianResponse, Project } from "@/types";
 
-export type Project = {
-  title: string;
-  keywords: string[];
-  image: string | StaticImageData;
-  slug: string;
-  createdAt: string;
-  subtitle: string;
-  services: string;
-  product: string;
-  introduction: string;
+const baseUrl = "http://127.0.0.1:27123/vault/Portfolio/Werk/";
+const options = {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + process.env.VAULT_TOKEN,
+    Accept: "application/vnd.olrapi.note+json",
+  },
 };
 
-const projects: Project[] = [
-  {
-    title: "Youngpwr",
-    keywords: ["youngpwr", "young", "pwr", "jongeren"],
-    image: youngpwr,
-    slug: "youngpwr",
-    createdAt: "2000-08-15",
-    subtitle:
-      "Een platform voor jongeren om zichzelf te ontwikkelen en te groeien in het bedrijfsleven.",
-    services: "Webdesign, webdevelopment, SEO, serverbeheer, onderhoud",
-    product: "Website, CMS, Mailchimp integratie",
-    introduction:
-      "YoungPWR, hét platform voor alle jongeren. YoungPWR is jouw coach en geeft je het netwerk dat je nodig hebt voor meer power en geluk om succesvol te zijn én net dat beetje meer te verdienen.",
-  },
-  // {
-  //   title: "Sieraat",
-  //   image: sieraat,
-  //   slug: "sieraat",
-  // },
-];
+const getProjects = async (): Promise<Project[] | undefined> => {
+  // Get markdown files from folder
+  const files = await fetch(baseUrl, options).then((res) =>
+    res.json().then((data) => {
+      return data.files;
+    })
+  );
 
-export default projects;
+  // Read each file content
+  const projectsPromises = files.map((file: string) =>
+    fetch(baseUrl + file, options).then((res) => res.json())
+  );
+
+  const obsidianResponse = (await Promise.all(
+    projectsPromises
+  )) as ObsidianResponse[];
+
+  // Map to Project type
+  const projects = obsidianResponse.map((project) => {
+    const cleanedContent = project.content.replace(/---\n[\s\S]*?---\n/, "");
+
+    return {
+      title: project.frontmatter.title,
+      keywords: project.frontmatter.keywords,
+      slug: project.frontmatter.slug,
+      created: project.frontmatter.created,
+      subtitle: project.frontmatter.subtitle,
+      services: project.frontmatter.services,
+      product: project.frontmatter.product,
+      introduction: project.frontmatter.introduction,
+      content: cleanedContent,
+    };
+  });
+
+  return projects;
+};
+
+const getProject = async (slug: string): Promise<Project | undefined> => {
+  const project = await fetch(baseUrl + slug + ".md", options).then((res) =>
+    res.json()
+  );
+
+  const cleanedContent = project.content.replace(/---\n[\s\S]*?---\n/, "");
+
+  return {
+    title: project.frontmatter.title,
+    keywords: project.frontmatter.keywords,
+    slug: project.frontmatter.slug,
+    created: project.frontmatter.created,
+    subtitle: project.frontmatter.subtitle,
+    services: project.frontmatter.services,
+    product: project.frontmatter.product,
+    introduction: project.frontmatter.introduction,
+    content: cleanedContent,
+  };
+};
+
+export { getProjects, getProject };

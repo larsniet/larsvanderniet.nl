@@ -1,14 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProjectPreview from "@/components/ProjectPreview";
-import projects from "@/utils/data";
+import { getProjects } from "@/utils/data";
 
 import outline from "@/assets/logo_outline.png";
 
-export default function Home() {
+export default async function Home() {
+  const projects = await getProjects();
+
   return (
     <main className="flex min-h-screen flex-col xl:flex-row">
-      <div className="flex min-h-screen flex-col justify-between p-8 xl:w-1/2 xl:sticky xl:top-0 xl:p-20">
+      <div
+        style={{ minHeight: "-webkit-fill-available" }}
+        className="flex h-full flex-col justify-between p-8 xl:w-1/2 xl:sticky xl:top-0 xl:p-20 xl:h-screen"
+      >
         <div className="flex gap-2 items-end">
           <Link href="/">
             <div className="w-8 h-8 bg-black relative lg:w-12 lg:h-12">
@@ -58,9 +63,10 @@ export default function Home() {
       </div>
 
       <div className="h-full xl:w-1/2">
-        {projects.map((project, index) => (
-          <ProjectPreview key={index} {...project} />
-        ))}
+        {projects &&
+          projects.map((project, index) => (
+            <ProjectPreview key={index} {...project} />
+          ))}
       </div>
     </main>
   );
